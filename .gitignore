@@ -1,0 +1,40 @@
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+*.secret
+*.secrets
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+
+# Vault credentials and local state
+.vault-token
+vault-token
+*_unseal_keys*
+*_root_token*
+vault-data/
+data/
+
+# Temporary credentials and configuration
+vault-db-creds.json
+vault-postgres-config.json
+vault-db-role.json
+*.pgpass
+*.tfstate
+*.tfstate.*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+app/app.py.bak
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

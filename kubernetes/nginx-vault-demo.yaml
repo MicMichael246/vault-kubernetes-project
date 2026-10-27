@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-vault-demo
+  namespace: default
+  labels:
+    app: nginx-vault-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-vault-demo
+  template:
+    metadata:
+      labels:
+        app: nginx-vault-demo
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "vault-auth-test"
+        vault.hashicorp.com/agent-inject-secret-app-config: "secret/data/app/config"
+        vault.hashicorp.com/agent-inject-template-app-config: |
+          {{- with secret "secret/data/app/config" -}}
+          Username: {{ .Data.data.username }}
+          Password: {{ .Data.data.password }}
+          {{- end }}
+    spec:
+      serviceAccountName: vault-auth-test
+      containers:
+        - name: nginx
+          image: nginx:stable
+          ports:
+            - name: http
+              containerPort: 80
