@@ -3,6 +3,8 @@
 A hands-on DevOps and cloud-security project using HashiCorp Vault,
 Kubernetes, PostgreSQL, and Vault Agent Injector.
 
+[![Application CI](https://github.com/MicMichael246/vault-kubernetes-project/actions/workflows/ci.yml/badge.svg)](https://github.com/MicMichael246/vault-kubernetes-project/actions/workflows/ci.yml)
+
 ## Documentation
 
 - [Architecture and Request Flow](docs/architecture.md)
@@ -76,6 +78,17 @@ The expected results are a healthy response, confirmation that the injected secr
 > **Important:** These instructions resume an existing lab; they do not constitute a complete fresh-install procedure. Vault initialization, Kubernetes authentication, database configuration, and secret creation must be completed separately.
 
 ## Architecture
+
+
+```mermaid
+flowchart LR
+    APP["Demo application Pod"] -->|"Kubernetes authentication"| VAULT["HashiCorp Vault"]
+    VAULT -->|"Agent Injector renders credentials"| SECRET["Injected credentials file"]
+    APP -->|"Reads credentials"| SECRET
+    VAULT -->|"Creates leased database credentials"| DB[("PostgreSQL")]
+    APP -->|"Queries using leased credentials"| DB
+```
+
 
 - Kubernetes: Minikube
 - Secrets management: HashiCorp Vault
