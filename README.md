@@ -268,3 +268,29 @@ appropriate access controls, monitoring, and security review.
 - CI/CD and security scanning
 - Monitoring and alerting
 - Infrastructure automation
+
+## Security Features and Limitations
+
+### Security Features
+
+- **Centralized secrets management:** HashiCorp Vault manages database credential generation and delivery.
+- **Kubernetes authentication:** Workloads authenticate to Vault using Kubernetes ServiceAccount identity.
+- **Dynamic database credentials:** Vault's PostgreSQL database secrets engine generates temporary database credentials with configurable leases.
+- **Least-privilege access:** Vault policies restrict access to the secrets paths required by the application.
+- **Credential injection:** Vault Agent Injector makes the required credentials available to the application through an injected file.
+- **Sensitive-data handling:** Application tests verify that secret values are not exposed in relevant HTTP responses and error handling.
+- **Automated testing:** GitHub Actions runs the Python unit tests on pushes and pull requests to `main`.
+
+### Security Limitations
+
+This repository is a local learning lab, not a production-ready deployment.
+
+- **TLS:** The local demo may use HTTP for Vault communication. Production deployments should configure and validate TLS.
+- **Vault initialization and unsealing:** Follow the documented initialization and unsealing procedure. Protect root tokens and unseal or recovery keys; never commit them to Git.
+- **Database permissions:** Verify that the database account used by Vault has only the permissions required to manage the intended dynamic roles.
+- **Credential lifecycle:** Configure and test lease expiration, renewal, and revocation behavior for the application’s use case.
+- **Kubernetes hardening:** Production deployments should apply appropriate network policies, pod security controls, resource limits, and restricted RBAC.
+- **High availability and recovery:** Production use requires an appropriate Vault storage, backup, recovery, monitoring, and availability strategy.
+- **Configuration review:** Review example passwords, local settings, policies, and deployment manifests before adapting this lab for another environment.
+
+**Important:** Do not commit Vault root tokens, unseal keys, real passwords, access tokens, private keys, or populated secret files to the repository.
