@@ -259,6 +259,9 @@ During a follow-up local-lab test on 2026-10-28:
 
 - Vault Agent rendered the dynamic database credential template multiple
   times while the application remained running.
+- Vault Agent logs recorded a successful authentication-token renewal.
+- The shortened effective TTL warning for database credentials continued
+  after that authentication-token renewal; its root cause remains unknown.
 - Vault server logs recorded database credential lease revocation events.
 - The number of PostgreSQL roles matching the dynamic credential naming
   pattern decreased from two to one during observation.
