@@ -253,6 +253,30 @@ in documentation or diagnostic output.
 
 Investigation also confirmed that the database role is configured with a 2-minute default TTL and a 5-minute maximum, the database mount maximum TTL is 768 hours, the Kubernetes auth role token TTL is 1 hour, and no explicit system-wide default or maximum lease TTL is configured. These settings do not explain the approximately 40–45-second effective TTL reported by Vault Agent. The cause remains unresolved; no speculative TTL changes have been applied.
 
+### Recent Dynamic Credential Lifecycle Observations
+
+During a follow-up local-lab test on 2026-10-28:
+
+- Vault Agent rendered the dynamic database credential template multiple
+  times while the application remained running.
+- Vault server logs recorded database credential lease revocation events.
+- The number of PostgreSQL roles matching the dynamic credential naming
+  pattern decreased from two to one during observation.
+- The application `/db-check` endpoint continued to return a successful
+  database connection.
+- The remaining matching PostgreSQL role had a future password expiration
+  time at the time of the final role-count check.
+
+These observations are consistent with ongoing credential refresh and
+lease cleanup. However, the test did not correlate an individual Vault
+lease ID with its corresponding PostgreSQL role, and did not establish
+the cause of the Agent's shortened effective TTL warning. The dynamic
+credential lifecycle is therefore partially validated, not conclusively
+validated end to end.
+
+Diagnostic evidence must not include passwords, Vault tokens, unseal keys,
+or full lease IDs.
+
 ## Security Warning
 
 This is a local learning lab, not a production deployment.
